@@ -22,7 +22,7 @@ use tokio::sync::mpsc;
 use tokio::time::sleep;
 
 // Scheduler tasks
-async fn HourlyScheduler() {
+async fn hourly_scheduler() {
     loop {
         // Task to be executed every 12 hours
         println!("Scheduler running...");
@@ -39,7 +39,7 @@ async fn main() -> std::io::Result<()> {
     env_logger::init();
 
     let config = Arc::new(Config::new());
-    let address = format!("127.0.0.1:{}", config.service_port);
+    let address = format!("0.0.0.0:{}", config.service_port);
     let pool = establish_connection_pool();
 
     info!("Stats analytics");
@@ -47,7 +47,7 @@ async fn main() -> std::io::Result<()> {
 
     // Start scheduler
     let scheduler = tokio::spawn(async {
-        HourlyScheduler().await;
+        hourly_scheduler().await;
     });
 
     // Setup the background processing queue
